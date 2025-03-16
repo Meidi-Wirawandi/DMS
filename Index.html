@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Management System</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    /* Tambahan styling jika diperlukan */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      z-index: 1000;
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 2s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Loading Spinner -->
+  <div id="loading" class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">Data Management System</h1>
+    
+    <!-- Form Input -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700">Form Input Data</h2>
+      
+      <form id="dataForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="hidden" id="dataId">
+        
+        <div class="mb-4">
+          <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+          <input type="date" id="tanggal" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="mb-4">
+          <label for="bulan" class="block text-sm font-medium text-gray-700 mb-1">Bulan</label>
+          <select id="bulan" name="bulan" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Pilih Bulan --</option>
+          </select>
+        </div>
+        
+        <div class="mb-4">
+          <label for="bidang" class="block text-sm font-medium text-gray-700 mb-1">Bidang</label>
+          <select id="bidang" name="bidang" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Pilih Bidang --</option>
+          </select>
+        </div>
+        
+        <div class="mb-4">
+          <label for="subKegiatan" class="block text-sm font-medium text-gray-700 mb-1">Sub Kegiatan</label>
+          <select id="subKegiatan" name="subKegiatan" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Pilih Sub Kegiatan --</option>
+          </select>
+        </div>
+        
+        <div class="mb-4">
+          <label for="sumberDana" class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
+          <select id="sumberDana" name="sumberDana" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">-- Pilih Sumber Dana --</option>
+          </select>
+        </div>
+        
+        <div class="mb-4">
+          <label for="total" class="block text-sm font-medium text-gray-700 mb-1">Total</label>
+          <input type="number" id="total" name="total" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="mb-4 md:col-span-2">
+          <label for="uraian" class="block text-sm font-medium text-gray-700 mb-1">Uraian</label>
+          <textarea id="uraian" name="uraian" rows="3" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+        
+        <div class="md:col-span-2 flex gap-2">
+          <button type="submit" id="saveButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md">
+            Simpan Data
+          </button>
+          <button type="button" id="resetButton" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md">
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Tabel Data -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700">Data Tersimpan</h2>
+      
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bulan</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bidang</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Kegiatan</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sumber Dana</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uraian</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="dataTable" class="bg-white divide-y divide-gray-200">
+            <!-- Data akan dirender secara dinamis di sini -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div id="noData" class="text-center py-4 text-gray-500 hidden">
+        Tidak ada data tersimpan
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Inisialisasi variabel global
+    let allData = [];
+    let referenceData = {};
+    let isEditing = false;
+    
+    // Menampilkan loading spinner
+    function showLoading() {
+      document.getElementById('loading').style.display = 'flex';
+    }
+    
+    // Menyembunyikan loading spinner
+    function hideLoading() {
+      document.getElementById('loading').style.display = 'none';
+    }
+    
+    // Mengambil data referensi (untuk dropdown)
+    function loadReferenceData() {
+      showLoading();
+      google.script.run
+        .withSuccessHandler(function(data) {
+          referenceData = data;
+          populateDropdowns();
+          loadAllData();
+        })
+        .withFailureHandler(function(error) {
+          hideLoading();
+          alert('Error loading reference data: ' + error);
+        })
+        .getReferenceData();
+    }
+    
+    // Mengisi dropdown dengan data referensi
+    function populateDropdowns() {
+      // Populate Bulan dropdown
+      const bulanSelect = document.getElementById('bulan');
+      bulanSelect.innerHTML = '<option value="">-- Pilih Bulan --</option>';
+      referenceData.bulan.forEach(function(item) {
+        if (item) { // Pastikan item tidak kosong
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          bulanSelect.appendChild(option);
+        }
+      });
+      
+      // Populate Bidang dropdown
+      const bidangSelect = document.getElementById('bidang');
+      bidangSelect.innerHTML = '<option value="">-- Pilih Bidang --</option>';
+      referenceData.bidang.forEach(function(item) {
+        if (item) { // Pastikan item tidak kosong
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          bidangSelect.appendChild(option);
+        }
+      });
+      
+      // Populate Sub Kegiatan dropdown
+      const skSelect = document.getElementById('subKegiatan');
+      skSelect.innerHTML = '<option value="">-- Pilih Sub Kegiatan --</option>';
+      referenceData.subKegiatan.forEach(function(item) {
+        if (item) { // Pastikan item tidak kosong
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          skSelect.appendChild(option);
+        }
+      });
+      
+      // Populate Sumber Dana dropdown
+      const sdSelect = document.getElementById('sumberDana');
+      sdSelect.innerHTML = '<option value="">-- Pilih Sumber Dana --</option>';
+      referenceData.sumberDana.forEach(function(item) {
+        if (item) { // Pastikan item tidak kosong
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          sdSelect.appendChild(option);
+        }
+      });
+    }
+    
+    // Mengambil semua data
+    function loadAllData() {
+      google.script.run
+        .withSuccessHandler(function(data) {
+          allData = data;
+          renderDataTable();
+          hideLoading();
+        })
+        .withFailureHandler(function(error) {
+          hideLoading();
+          alert('Error loading data: ' + error);
+        })
+        .getAllData();
+    }
+    
+    // Render tabel data
+    function renderDataTable() {
+      const tableBody = document.getElementById('dataTable');
+      const noDataDiv = document.getElementById('noData');
+      
+      tableBody.innerHTML = '';
+      
+      if (allData.length === 0) {
+        noDataDiv.classList.remove('hidden');
+        return;
+      }
+      
+      noDataDiv.classList.add('hidden');
+      
+      allData.forEach(function(item) {
+        const row = document.createElement('tr');
+        
+        // Format tanggal untuk ditampilkan
+        let displayDate = '';
+        if (item.tanggal) {
+          const date = new Date(item.tanggal);
+          displayDate = isNaN(date) ? item.tanggal : date.toLocaleDateString('id-ID');
+        }
+        
+        // Tambahkan sel-sel data
+        row.innerHTML = `
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${displayDate}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.bulan || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.bidang || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.subKegiatan || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.sumberDana || ''}</td>
+  <td class="px-6 py-4 text-sm text-gray-900">${item.uraian || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${typeof item.total === 'number' ? item.total.toLocaleString('id-ID') : (item.total || '')}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+    <button data-id="${String(item.id)}" class="edit-btn text-blue-600 hover:text-blue-900 mr-2">Edit</button>
+    <button data-id="${String(item.id)}" class="delete-btn text-red-600 hover:text-red-900">Hapus</button>
+  </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+      
+      // Tambahkan event listener untuk tombol edit dan delete
+      document.querySelectorAll('.edit-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+          editData(this.getAttribute('data-id'));
+        });
+      });
+      
+      document.querySelectorAll('.delete-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+          deleteData(this.getAttribute('data-id'));
+        });
+      });
+    }
+    
+    // Fungsi untuk mengisi form dengan data yang ada untuk diedit
+    function editData(id) {
+  console.log('Editing data dengan ID:', id); // Log untuk debugging
+  
+  const data = allData.find(item => String(item.id) === String(id));
+  if (!data) {
+    console.error('Data tidak ditemukan untuk ID:', id);
+    alert('Data tidak ditemukan');
+    return;
+  }
+  
+  console.log('Data yang akan diedit:', data); // Log untuk debugging
+  
+  document.getElementById('dataId').value = data.id;
+  document.getElementById('tanggal').value = data.tanggal;
+  document.getElementById('bulan').value = data.bulan;
+  document.getElementById('bidang').value = data.bidang;
+  document.getElementById('subKegiatan').value = data.subKegiatan;
+  document.getElementById('sumberDana').value = data.sumberDana;
+  document.getElementById('uraian').value = data.uraian;
+  document.getElementById('total').value = data.total;
+  
+  document.getElementById('saveButton').textContent = 'Update Data';
+  isEditing = true;
+  
+  // Scroll ke form
+  document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+}
+    
+// Fungsi untuk menghapus data
+function deleteData(id) {
+  if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
+  
+  console.log('Menghapus data dengan ID:', id); // Log untuk debugging
+  
+  showLoading();
+  google.script.run
+    .withSuccessHandler(function(response) {
+      hideLoading();
+      if (response.success) {
+        alert('Data berhasil dihapus');
+        loadAllData(); // Reload data setelah menghapus
+      } else {
+        alert('Error menghapus data: ' + (response.message || 'Unknown error'));
+        console.error('Delete error:', response); // Log error untuk debugging
+      }
+    })
+    .withFailureHandler(function(error) {
+      hideLoading();
+      alert('Error: ' + error);
+      console.error('Delete error:', error); // Log error untuk debugging
+    })
+    .deleteData(id);
+}
+        
+        // Reset form
+        function resetForm() {
+          document.getElementById('dataForm').reset();
+          document.getElementById('dataId').value = '';
+          document.getElementById('saveButton').textContent = 'Simpan Data';
+          isEditing = false;
+        }
+        
+        // Inisialisasi event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+          // Load data referensi saat halaman dimuat
+          loadReferenceData();
+          
+          // Form submit handler
+          document.getElementById('dataForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  // Validasi form
+  const formData = {
+    id: document.getElementById('dataId').value,
+    tanggal: document.getElementById('tanggal').value,
+    bulan: document.getElementById('bulan').value,
+    bidang: document.getElementById('bidang').value,
+    subKegiatan: document.getElementById('subKegiatan').value,
+    sumberDana: document.getElementById('sumberDana').value,
+    uraian: document.getElementById('uraian').value,
+    total: document.getElementById('total').value
+  };
+  
+  console.log('Form data yang akan disimpan/update:', formData); // Log untuk debugging
+  
+  // Validasi tanggal
+  if (!formData.tanggal) {
+    alert('Tanggal harus diisi!');
+    return;
+  }
+  
+  // Validasi total (harus berupa angka)
+  if (isNaN(parseFloat(formData.total))) {
+    alert('Total harus berupa angka!');
+    return;
+  }
+  
+  showLoading();
+  
+  if (isEditing) {
+    // Update data yang sudah ada
+    console.log('Mode update, mengirim data ke server...'); // Log untuk debugging
+    google.script.run
+      .withSuccessHandler(function(response) {
+        hideLoading();
+        console.log('Response update:', response); // Log untuk debugging
+        
+        if (response.success) {
+          alert('Data berhasil diupdate');
+          resetForm();
+          loadAllData();
+        } else {
+          alert('Error updating data: ' + (response.message || 'Unknown error'));
+        }
+      })
+      .withFailureHandler(function(error) {
+        hideLoading();
+        console.error('Error update:', error); // Log untuk debugging
+        alert('Error: ' + error);
+      })
+      .updateData(formData);
+  } else {
+              // Simpan data baru
+              google.script.run
+                .withSuccessHandler(function(response) {
+                  if (response.success) {
+                    resetForm();
+                    loadAllData();
+                  } else {
+                    hideLoading();
+                    alert('Error saving data: ' + (response.message || 'Unknown error'));
+                  }
+                })
+                .withFailureHandler(function(error) {
+                  hideLoading();
+                  alert('Error: ' + error);
+                })
+                .saveData(formData);
+            }
+          });
+          
+          // Reset button handler
+          document.getElementById('resetButton').addEventListener('click', resetForm);
+        });
+      </script>
+    </body>
+    </html>
