@@ -37,6 +37,14 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -45,96 +53,211 @@
     <div class="loading-spinner"></div>
   </div>
 
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">Data Management System</h1>
-    
-    <!-- Form Input -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-      <h2 class="text-xl font-semibold mb-4 text-gray-700">Form Input Data</h2>
-      
-      <form id="dataForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="hidden" id="dataId">
-        
-        <div class="mb-4">
-          <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-          <input type="date" id="tanggal" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        
-        <div class="mb-4">
-          <label for="bulan" class="block text-sm font-medium text-gray-700 mb-1">Bulan</label>
-          <select id="bulan" name="bulan" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">-- Pilih Bulan --</option>
-          </select>
-        </div>
-        
-        <div class="mb-4">
-          <label for="bidang" class="block text-sm font-medium text-gray-700 mb-1">Bidang</label>
-          <select id="bidang" name="bidang" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">-- Pilih Bidang --</option>
-          </select>
-        </div>
-        
-        <div class="mb-4">
-          <label for="subKegiatan" class="block text-sm font-medium text-gray-700 mb-1">Sub Kegiatan</label>
-          <select id="subKegiatan" name="subKegiatan" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">-- Pilih Sub Kegiatan --</option>
-          </select>
-        </div>
-        
-        <div class="mb-4">
-          <label for="sumberDana" class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
-          <select id="sumberDana" name="sumberDana" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">-- Pilih Sumber Dana --</option>
-          </select>
-        </div>
-        
-        <div class="mb-4">
-          <label for="total" class="block text-sm font-medium text-gray-700 mb-1">Total</label>
-          <input type="number" id="total" name="total" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        
-        <div class="mb-4 md:col-span-2">
-          <label for="uraian" class="block text-sm font-medium text-gray-700 mb-1">Uraian</label>
-          <textarea id="uraian" name="uraian" rows="3" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-        </div>
-        
-        <div class="md:col-span-2 flex gap-2">
-          <button type="submit" id="saveButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md">
-            Simpan Data
-          </button>
-          <button type="button" id="resetButton" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md">
-            Reset
-          </button>
-        </div>
-      </form>
-    </div>
-    
-    <!-- Tabel Data -->
-    <div class="bg-white shadow-md rounded-lg p-6">
-      <h2 class="text-xl font-semibold mb-4 text-gray-700">Data Tersimpan</h2>
-      
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bulan</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bidang</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Kegiatan</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sumber Dana</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uraian</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="dataTable" class="bg-white divide-y divide-gray-200">
-            <!-- Data akan dirender secara dinamis di sini -->
-          </tbody>
-        </table>
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="bg-blue-800 text-white w-64 flex-shrink-0 hidden md:block">
+      <div class="p-4">
+        <h1 class="text-xl font-bold">Data Management</h1>
+        <p class="text-blue-200 text-sm">System</p>
       </div>
-      
-      <div id="noData" class="text-center py-4 text-gray-500 hidden">
-        Tidak ada data tersimpan
+      <nav class="mt-5">
+        <ul>
+          <li class="menu-item">
+            <a href="#" data-page="home" class="flex items-center px-6 py-3 hover:bg-blue-700 menu-link active">
+              <span class="mr-3">🏠</span>
+              Halaman Utama
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="#" data-page="form" class="flex items-center px-6 py-3 hover:bg-blue-700 menu-link">
+              <span class="mr-3">📝</span>
+              Form Input
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="#" data-page="data" class="flex items-center px-6 py-3 hover:bg-blue-700 menu-link">
+              <span class="mr-3">📊</span>
+              Data Tersimpan
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Mobile Header with Hamburger -->
+    <div class="md:hidden bg-blue-800 text-white p-4 w-full fixed top-0 z-10">
+      <div class="flex items-center justify-between">
+        <h1 class="text-xl font-bold">Data Management</h1>
+        <button id="mobile-menu-button" class="text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden fixed inset-0 bg-blue-800 text-white z-20 transform translate-x-full transition-transform duration-300 ease-in-out">
+      <div class="p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Menu</h1>
+        <button id="close-menu-button" class="text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <nav class="mt-5">
+        <ul>
+          <li class="mobile-menu-item">
+            <a href="#" data-page="home" class="flex items-center px-6 py-3 hover:bg-blue-700 mobile-menu-link">
+              <span class="mr-3">🏠</span>
+              Halaman Utama
+            </a>
+          </li>
+          <li class="mobile-menu-item">
+            <a href="#" data-page="form" class="flex items-center px-6 py-3 hover:bg-blue-700 mobile-menu-link">
+              <span class="mr-3">📝</span>
+              Form Input
+            </a>
+          </li>
+          <li class="mobile-menu-item">
+            <a href="#" data-page="data" class="flex items-center px-6 py-3 hover:bg-blue-700 mobile-menu-link">
+              <span class="mr-3">📊</span>
+              Data Tersimpan
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="md:p-8 p-4 md:pt-8 pt-20">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+          <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">Selamat Datang di Data Management System</h1>
+          <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-blue-50 p-6 rounded-lg">
+                <h3 class="text-xl font-semibold mb-3 text-blue-700">Form Input</h3>
+                <p class="text-gray-600 mb-4">Tambahkan atau edit data baru melalui form input.</p>
+                <button class="navigate-btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md" data-target="form">
+                  Buka Form Input
+                </button>
+              </div>
+              <div class="bg-blue-50 p-6 rounded-lg">
+                <h3 class="text-xl font-semibold mb-3 text-blue-700">Data Tersimpan</h3>
+                <p class="text-gray-600 mb-4">Lihat dan kelola data yang telah tersimpan.</p>
+                <button class="navigate-btn bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md" data-target="data">
+                  Lihat Data
+                </button>
+              </div>
+            </div>
+            <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+              <h3 class="text-xl font-semibold mb-3 text-gray-700">Tentang Aplikasi</h3>
+              <p class="text-gray-600">
+                Aplikasi Data Management System ini menggunakan Google Sheets sebagai database dan Google Apps Script untuk backend. 
+                Dibangun dengan Tailwind CSS untuk tampilan yang responsif dan modern.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Form Page -->
+        <div id="form-page" class="page">
+          <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">Form Input Data</h1>
+          
+          <!-- Form Input -->
+          <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <form id="dataForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="hidden" id="dataId">
+              
+              <div class="mb-4">
+                <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                <input type="date" id="tanggal" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              
+              <div class="mb-4">
+                <label for="bulan" class="block text-sm font-medium text-gray-700 mb-1">Bulan</label>
+                <select id="bulan" name="bulan" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Pilih Bulan --</option>
+                </select>
+              </div>
+              
+              <div class="mb-4">
+                <label for="bidang" class="block text-sm font-medium text-gray-700 mb-1">Bidang</label>
+                <select id="bidang" name="bidang" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Pilih Bidang --</option>
+                </select>
+              </div>
+              
+              <div class="mb-4">
+                <label for="subKegiatan" class="block text-sm font-medium text-gray-700 mb-1">Sub Kegiatan</label>
+                <select id="subKegiatan" name="subKegiatan" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Pilih Sub Kegiatan --</option>
+                </select>
+              </div>
+              
+              <div class="mb-4">
+                <label for="sumberDana" class="block text-sm font-medium text-gray-700 mb-1">Sumber Dana</label>
+                <select id="sumberDana" name="sumberDana" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">-- Pilih Sumber Dana --</option>
+                </select>
+              </div>
+              
+              <div class="mb-4">
+                <label for="total" class="block text-sm font-medium text-gray-700 mb-1">Total</label>
+                <input type="number" id="total" name="total" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              
+              <div class="mb-4 md:col-span-2">
+                <label for="uraian" class="block text-sm font-medium text-gray-700 mb-1">Uraian</label>
+                <textarea id="uraian" name="uraian" rows="3" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+              </div>
+              
+              <div class="md:col-span-2 flex gap-2">
+                <button type="submit" id="saveButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md">
+                  Simpan Data
+                </button>
+                <button type="button" id="resetButton" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md">
+                  Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Data Page -->
+        <div id="data-page" class="page">
+          <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">Data Tersimpan</h1>
+          
+          <!-- Tabel Data -->
+          <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bulan</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bidang</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Kegiatan</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sumber Dana</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uraian</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="dataTable" class="bg-white divide-y divide-gray-200">
+                  <!-- Data akan dirender secara dinamis di sini -->
+                </tbody>
+              </table>
+            </div>
+            
+            <div id="noData" class="text-center py-4 text-gray-500 hidden">
+              Tidak ada data tersimpan
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -283,6 +406,8 @@
       document.querySelectorAll('.edit-btn').forEach(function(button) {
         button.addEventListener('click', function() {
           editData(this.getAttribute('data-id'));
+          // Ubah halaman ke form setelah klik edit
+          switchPage('form');
         });
       });
       
@@ -295,149 +420,205 @@
     
     // Fungsi untuk mengisi form dengan data yang ada untuk diedit
     function editData(id) {
-  console.log('Editing data dengan ID:', id); // Log untuk debugging
-  
-  const data = allData.find(item => String(item.id) === String(id));
-  if (!data) {
-    console.error('Data tidak ditemukan untuk ID:', id);
-    alert('Data tidak ditemukan');
-    return;
-  }
-  
-  console.log('Data yang akan diedit:', data); // Log untuk debugging
-  
-  document.getElementById('dataId').value = data.id;
-  document.getElementById('tanggal').value = data.tanggal;
-  document.getElementById('bulan').value = data.bulan;
-  document.getElementById('bidang').value = data.bidang;
-  document.getElementById('subKegiatan').value = data.subKegiatan;
-  document.getElementById('sumberDana').value = data.sumberDana;
-  document.getElementById('uraian').value = data.uraian;
-  document.getElementById('total').value = data.total;
-  
-  document.getElementById('saveButton').textContent = 'Update Data';
-  isEditing = true;
-  
-  // Scroll ke form
-  document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
-}
-    
-// Fungsi untuk menghapus data
-function deleteData(id) {
-  if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
-  
-  console.log('Menghapus data dengan ID:', id); // Log untuk debugging
-  
-  showLoading();
-  google.script.run
-    .withSuccessHandler(function(response) {
-      hideLoading();
-      if (response.success) {
-        alert('Data berhasil dihapus');
-        loadAllData(); // Reload data setelah menghapus
-      } else {
-        alert('Error menghapus data: ' + (response.message || 'Unknown error'));
-        console.error('Delete error:', response); // Log error untuk debugging
+      console.log('Editing data dengan ID:', id); // Log untuk debugging
+      
+      const data = allData.find(item => String(item.id) === String(id));
+      if (!data) {
+        console.error('Data tidak ditemukan untuk ID:', id);
+        alert('Data tidak ditemukan');
+        return;
       }
-    })
-    .withFailureHandler(function(error) {
-      hideLoading();
-      alert('Error: ' + error);
-      console.error('Delete error:', error); // Log error untuk debugging
-    })
-    .deleteData(id);
-}
+      
+      console.log('Data yang akan diedit:', data); // Log untuk debugging
+      
+      document.getElementById('dataId').value = data.id;
+      document.getElementById('tanggal').value = data.tanggal;
+      document.getElementById('bulan').value = data.bulan;
+      document.getElementById('bidang').value = data.bidang;
+      document.getElementById('subKegiatan').value = data.subKegiatan;
+      document.getElementById('sumberDana').value = data.sumberDana;
+      document.getElementById('uraian').value = data.uraian;
+      document.getElementById('total').value = data.total;
+      
+      document.getElementById('saveButton').textContent = 'Update Data';
+      isEditing = true;
+    }
+    
+    // Fungsi untuk menghapus data
+    function deleteData(id) {
+      if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
+      
+      console.log('Menghapus data dengan ID:', id); // Log untuk debugging
+      
+      showLoading();
+      google.script.run
+        .withSuccessHandler(function(response) {
+          hideLoading();
+          if (response.success) {
+            alert('Data berhasil dihapus');
+            loadAllData(); // Reload data setelah menghapus
+          } else {
+            alert('Error menghapus data: ' + (response.message || 'Unknown error'));
+            console.error('Delete error:', response); // Log error untuk debugging
+          }
+        })
+        .withFailureHandler(function(error) {
+          hideLoading();
+          alert('Error: ' + error);
+          console.error('Delete error:', error); // Log error untuk debugging
+        })
+        .deleteData(id);
+    }
         
-        // Reset form
-        function resetForm() {
-          document.getElementById('dataForm').reset();
-          document.getElementById('dataId').value = '';
-          document.getElementById('saveButton').textContent = 'Simpan Data';
-          isEditing = false;
+    // Reset form
+    function resetForm() {
+      document.getElementById('dataForm').reset();
+      document.getElementById('dataId').value = '';
+      document.getElementById('saveButton').textContent = 'Simpan Data';
+      isEditing = false;
+    }
+    
+    // Switch page function
+    function switchPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      
+      // Show selected page
+      document.getElementById(pageId + '-page').classList.add('active');
+      
+      // Update menu active state - desktop
+      document.querySelectorAll('.menu-link').forEach(link => {
+        link.classList.remove('active', 'bg-blue-700');
+        if (link.getAttribute('data-page') === pageId) {
+          link.classList.add('active', 'bg-blue-700');
+        }
+      });
+      
+      // Update menu active state - mobile
+      document.querySelectorAll('.mobile-menu-link').forEach(link => {
+        link.classList.remove('active', 'bg-blue-700');
+        if (link.getAttribute('data-page') === pageId) {
+          link.classList.add('active', 'bg-blue-700');
+        }
+      });
+      
+      // Close mobile menu after selection
+      document.getElementById('mobile-menu').classList.add('translate-x-full');
+    }
+    
+    // Inisialisasi event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load data referensi saat halaman dimuat
+      loadReferenceData();
+      
+      // Form submit handler
+      document.getElementById('dataForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validasi form
+        const formData = {
+          id: document.getElementById('dataId').value,
+          tanggal: document.getElementById('tanggal').value,
+          bulan: document.getElementById('bulan').value,
+          bidang: document.getElementById('bidang').value,
+          subKegiatan: document.getElementById('subKegiatan').value,
+          sumberDana: document.getElementById('sumberDana').value,
+          uraian: document.getElementById('uraian').value,
+          total: document.getElementById('total').value
+        };
+        
+        console.log('Form data yang akan disimpan/update:', formData); // Log untuk debugging
+        
+        // Validasi tanggal
+        if (!formData.tanggal) {
+          alert('Tanggal harus diisi!');
+          return;
         }
         
-        // Inisialisasi event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-          // Load data referensi saat halaman dimuat
-          loadReferenceData();
-          
-          // Form submit handler
-          document.getElementById('dataForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  // Validasi form
-  const formData = {
-    id: document.getElementById('dataId').value,
-    tanggal: document.getElementById('tanggal').value,
-    bulan: document.getElementById('bulan').value,
-    bidang: document.getElementById('bidang').value,
-    subKegiatan: document.getElementById('subKegiatan').value,
-    sumberDana: document.getElementById('sumberDana').value,
-    uraian: document.getElementById('uraian').value,
-    total: document.getElementById('total').value
-  };
-  
-  console.log('Form data yang akan disimpan/update:', formData); // Log untuk debugging
-  
-  // Validasi tanggal
-  if (!formData.tanggal) {
-    alert('Tanggal harus diisi!');
-    return;
-  }
-  
-  // Validasi total (harus berupa angka)
-  if (isNaN(parseFloat(formData.total))) {
-    alert('Total harus berupa angka!');
-    return;
-  }
-  
-  showLoading();
-  
-  if (isEditing) {
-    // Update data yang sudah ada
-    console.log('Mode update, mengirim data ke server...'); // Log untuk debugging
-    google.script.run
-      .withSuccessHandler(function(response) {
-        hideLoading();
-        console.log('Response update:', response); // Log untuk debugging
+        // Validasi total (harus berupa angka)
+        if (isNaN(parseFloat(formData.total))) {
+          alert('Total harus berupa angka!');
+          return;
+        }
         
-        if (response.success) {
-          alert('Data berhasil diupdate');
-          resetForm();
-          loadAllData();
+        showLoading();
+        
+        if (isEditing) {
+          // Update data yang sudah ada
+          console.log('Mode update, mengirim data ke server...'); // Log untuk debugging
+          google.script.run
+            .withSuccessHandler(function(response) {
+              hideLoading();
+              console.log('Response update:', response); // Log untuk debugging
+              
+              if (response.success) {
+                alert('Data berhasil diupdate');
+                resetForm();
+                loadAllData();
+                // Redirect ke halaman data setelah berhasil update
+                switchPage('data');
+              } else {
+                alert('Error updating data: ' + (response.message || 'Unknown error'));
+              }
+            })
+            .withFailureHandler(function(error) {
+              hideLoading();
+              console.error('Error update:', error); // Log untuk debugging
+              alert('Error: ' + error);
+            })
+            .updateData(formData);
         } else {
-          alert('Error updating data: ' + (response.message || 'Unknown error'));
+          // Simpan data baru
+          google.script.run
+            .withSuccessHandler(function(response) {
+              hideLoading();
+              if (response.success) {
+                alert('Data berhasil disimpan');
+                resetForm();
+                loadAllData();
+                // Redirect ke halaman data setelah berhasil simpan
+                switchPage('data');
+              } else {
+                alert('Error saving data: ' + (response.message || 'Unknown error'));
+              }
+            })
+            .withFailureHandler(function(error) {
+              hideLoading();
+              alert('Error: ' + error);
+            })
+            .saveData(formData);
         }
-      })
-      .withFailureHandler(function(error) {
-        hideLoading();
-        console.error('Error update:', error); // Log untuk debugging
-        alert('Error: ' + error);
-      })
-      .updateData(formData);
-  } else {
-              // Simpan data baru
-              google.script.run
-                .withSuccessHandler(function(response) {
-                  if (response.success) {
-                    resetForm();
-                    loadAllData();
-                  } else {
-                    hideLoading();
-                    alert('Error saving data: ' + (response.message || 'Unknown error'));
-                  }
-                })
-                .withFailureHandler(function(error) {
-                  hideLoading();
-                  alert('Error: ' + error);
-                })
-                .saveData(formData);
-            }
-          });
-          
-          // Reset button handler
-          document.getElementById('resetButton').addEventListener('click', resetForm);
+      });
+      
+      // Reset button handler
+      document.getElementById('resetButton').addEventListener('click', resetForm);
+      
+      // Menu navigation setup
+      document.querySelectorAll('.menu-link, .mobile-menu-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          switchPage(this.getAttribute('data-page'));
         });
-      </script>
-    </body>
-    </html>
+      });
+      
+      // Navigation buttons on home page
+      document.querySelectorAll('.navigate-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          switchPage(this.getAttribute('data-target'));
+        });
+      });
+      
+      // Mobile menu toggle
+      document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.remove('translate-x-full');
+      });
+      
+      document.getElementById('close-menu-button').addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.add('translate-x-full');
+      });
+    });
+  </script>
+</body>
+</html>
