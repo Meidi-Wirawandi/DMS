@@ -45,6 +45,19 @@
     .page.active {
       display: block;
     }
+    
+    /* Styling untuk kolom uraian */
+    .uraian-column {
+      width: 250px;
+      max-width: 250px;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+    
+    /* Pastikan semua kolom lain tidak wrap */
+    .nowrap-column {
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -237,14 +250,14 @@
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bulan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bidang</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Kegiatan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sumber Dana</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uraian</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider nowrap-column">Tanggal</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider nowrap-column">Bulan</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider nowrap-column">Bidang</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider nowrap-column">Sub Kegiatan</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider nowrap-column">Sumber Dana</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider uraian-column">Uraian</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider nowrap-column">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider nowrap-column">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="dataTable" class="bg-white divide-y divide-gray-200">
@@ -386,14 +399,14 @@
         
         // Tambahkan sel-sel data
         row.innerHTML = `
-  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${displayDate}</td>
-  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.bulan || ''}</td>
-  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.bidang || ''}</td>
-  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.subKegiatan || ''}</td>
-  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.sumberDana || ''}</td>
-  <td class="px-6 py-4 text-sm text-gray-900">${item.uraian || ''}</td>
-  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${typeof item.total === 'number' ? item.total.toLocaleString('id-ID') : (item.total || '')}</td>
-  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 nowrap-column">${displayDate}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 nowrap-column">${item.bulan || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 nowrap-column">${item.bidang || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 nowrap-column">${item.subKegiatan || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 nowrap-column">${item.sumberDana || ''}</td>
+  <td class="px-6 py-4 text-sm text-gray-900 uraian-column">${item.uraian || ''}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 nowrap-column">${typeof item.total === 'number' ? item.total.toLocaleString('id-ID') : (item.total || '')}</td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium nowrap-column">
     <button data-id="${String(item.id)}" class="edit-btn text-blue-600 hover:text-blue-900 mr-2">Edit</button>
     <button data-id="${String(item.id)}" class="delete-btn text-red-600 hover:text-red-900">Hapus</button>
   </td>
