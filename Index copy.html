@@ -177,14 +177,6 @@
               <p class="text-gray-600 mt-2">Total akumulasi dana dari seluruh data yang tersimpan.</p>
             </div>
             
-            <!-- Source-based Total Summary Cards -->
-            <div class="mt-6">
-              <h3 class="text-xl font-semibold mb-3 text-blue-700">Total Dana per Sumber Dana</h3>
-              <div id="sourceTotalCards" class="grid md:grid-cols-2 gap-4">
-                <!-- Cards will be generated dynamically here -->
-              </div>
-            </div>
-            
             <div class="mt-8 p-6 bg-gray-50 rounded-lg">
               <h3 class="text-xl font-semibold mb-3 text-gray-700">Tentang Aplikasi</h3>
               <p class="text-gray-600">
@@ -445,66 +437,6 @@
       
       // Update the element
       totalSummaryElement.textContent = formattedTotal;
-      
-      // Update source-based totals
-      updateSourceTotals();
-    }
-    
-    // Update source-based total summaries
-    function updateSourceTotals() {
-      const sourceTotalCardsContainer = document.getElementById('sourceTotalCards');
-      
-      // Clear previous cards
-      sourceTotalCardsContainer.innerHTML = '';
-      
-      // Group data by source and calculate totals
-      const sourceGroups = {};
-      
-      if (allData && allData.length > 0) {
-        allData.forEach(item => {
-          const source = item.sumberDana || 'Tidak Diketahui';
-          const amount = parseFloat(item.total) || 0;
-          
-          if (!sourceGroups[source]) {
-            sourceGroups[source] = 0;
-          }
-          
-          sourceGroups[source] += amount;
-        });
-      }
-      
-      // Create a card for each source
-      Object.keys(sourceGroups).sort().forEach(source => {
-        const amount = sourceGroups[source];
-        
-        // Format as Indonesian Rupiah
-        const formattedAmount = new Intl.NumberFormat('id-ID', {
-          style: 'currency',
-          currency: 'IDR',
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0
-        }).format(amount);
-        
-        // Create card element
-        const card = document.createElement('div');
-        card.className = 'bg-blue-50 p-4 rounded-lg';
-        card.innerHTML = `
-          <h4 class="text-lg font-semibold mb-2 text-blue-700">${source}</h4>
-          <div class="flex items-center">
-            <span class="text-2xl font-bold text-blue-800">${formattedAmount}</span>
-          </div>
-        `;
-        
-        sourceTotalCardsContainer.appendChild(card);
-      });
-      
-      // If no data, show a message
-      if (Object.keys(sourceGroups).length === 0) {
-        const noDataMessage = document.createElement('div');
-        noDataMessage.className = 'col-span-2 text-center py-4 text-gray-500';
-        noDataMessage.textContent = 'Tidak ada data tersimpan';
-        sourceTotalCardsContainer.appendChild(noDataMessage);
-      }
     }
     
     // Render tabel data
